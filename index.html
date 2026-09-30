@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kuis Informatika HOTS - Tema Otomotif</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+  html, body { overflow-x: hidden; }
+  body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    min-height: 100vh;
+    padding: 10px;
+    color: #fff;
+  }
+  .container {
+    background: rgba(255,255,255,0.97);
+    color: #222;
+    border-radius: 15px;
+    padding: 20px;
+    width: 100%;
+    max-width: 700px;
+    margin: 10px auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  h1 { color: #1e3c72; text-align: center; margin-bottom: 8px; font-size: 1.5em; }
+  h2 { color: #c0392b; margin-bottom: 12px; font-size: 1.2em; }
+  .subtitle { text-align: center; color: #555; margin-bottom: 20px; font-size: 0.9em; }
+  .materi-badge {
+    display: inline-block;
+    background: #2a5298;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    margin-bottom: 10px;
+  }
+  label { font-weight: bold; display: block; margin-top: 10px; font-size: 0.95em; }
+  input, select {
+    width: 100%;
+    padding: 14px;
+    margin: 6px 0 12px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px; /* mencegah auto-zoom di iOS */
+  }
+  input:focus, select:focus { border-color: #2a5298; outline: none; }
+  button {
+    background: #c0392b;
+    color: #fff;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    transition: 0.2s;
+    margin-top: 10px;
+    touch-action: manipulation;
+  }
+  button:hover, button:active { background: #a93226; transform: scale(0.98); }
+  button:disabled { background: #888; cursor: not-allowed; }
+  .header-quiz {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e3c72;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 0.85em;
+  }
+  .timer {
+    background: #c0392b;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1em;
+    white-space: nowrap;
+  }
+  .timer.warning { background: #e67e22; animation: pulse 1s infinite; }
+  .timer.danger { background: #c0392b; animation: pulse 0.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #27ae60, #2ecc71);
+    transition: width 0.3s;
+  }
+  .warning {
+    background: #fff3cd;
+    color: #856404;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 5px solid #ffc107;
+    font-size: 0.9em;
+  }
+  .info-box {
+    background: #e8f5e9;
+    padding: 14px;
+    border-radius: 10px;
+    margin: 15px 0;
+    border-left: 5px solid #2e7d32;
+    font-size: 0.9em;
+    line-height: 1.6;
+  }
+  .soal {
+    font-size: 1em;
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: #222;
+  }
+  .soal b { color: #1e3c72; }
+  .pilihan {
+    background: #f5f5f5;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+    font-size: 0.95em;
+    line-height: 1.5;
+    user-select: none;
+  }
+  .pilihan:hover { background: #e3f2fd; }
+  .pilihan.selected { background: #bbdefb; border-color: #1976d2; font-weight: bold; }
+  .hasil { text-align: center; padding: 10px 0; }
+  .nilai-besar {
+    font-size: 4em;
+    font-weight: bold;
+    color: #c0392b;
+    margin: 15px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  }
+  .wa-btn { background: #25D366; }
+  .wa-btn:hover, .wa-btn:active { background: #1ebe57; }
+  .detail {
+    text-align: left;
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    font-size: 0.95em;
+    line-height: 1.8;
+  }
+  .btn-secondary { background: #555; }
+  .btn-secondary:hover, .btn-secondary:active { background: #333; }
+
+  /* ===== RESPONSIVE MOBILE ===== */
+  @media (max-width: 600px) {
+    body { padding: 5px; }
+    .container { padding: 15px; border-radius: 12px; margin: 5px auto; }
+    h1 { font-size: 1.3em; }
+    .header-quiz { font-size: 0.8em; padding: 8px 10px; }
+    .soal { font-size: 0.95em; }
+    .pilihan { padding: 12px; font-size: 0.9em; }
+    .nilai-besar { font-size: 3em; }
+    button { padding: 13px; font-size: 15px; }
+    input, select { padding: 12px; }
+  }
+  @media (max-width: 360px) {
+    .container { padding: 12px; }
+    h1 { font-size: 1.15em; }
+    .soal { font-size: 0.9em; }
+    .pilihan { padding: 10px; font-size: 0.85em; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HALAMAN LOGIN -->
+<div class="container" id="halamanLogin">
+  <h1>🏁 KUIS INFORMATIKA HOTS</h1>
+  <p class="subtitle">Search Engine • Cek Fakta • Lateral Reading • MS Word</p>
+  <div class="info-box">
+    <b>📋 Petunjuk Pengerjaan:</b><br>
+    ⏱ Waktu: <b>45 menit</b> (25 soal)<br>
+    📱 Kerjakan di HP dengan tenang<br>
+    ⚠️ <b>Dilarang pindah aplikasi/tab.</b> Jika terdeteksi keluar, soal otomatis salah & lanjut.<br>
+    🧠 Soal berbentuk analisis & studi kasus (HOTS)
+  </div>
+  <label>Nama Lengkap</label>
+  <input type="text" id="nama" placeholder="Masukkan nama lengkap">
+  <label>Kelas</label>
+  <input type="text" id="kelas" placeholder="Contoh: X TKR 1">
+  <label>Nomor Ujian</label>
+  <input type="text" id="nomor" placeholder="Masukkan nomor ujian">
+  <button onclick="mulaiKuis()">MULAI UJIAN 🚀</button>
+</div>
+
+<!-- HALAMAN KUIS -->
+<div class="container" id="halamanKuis" style="display:none;">
+  <div class="header-quiz">
+    <div id="infoSiswa" style="font-weight:bold;"></div>
+    <div>Soal <span id="nomorSoal">1</span>/25</div>
+    <div class="timer" id="timerBox">⏱ <span id="timer">45:00</span></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div id="peringatanKeluar" class="warning" style="display:none;">
+    ⚠️ Anda terdeteksi keluar halaman! Soal ini dianggap SALAH. Lanjut otomatis...
+  </div>
+  <div id="materiBadge" class="materi-badge"></div>
+  <div class="soal" id="teksSoal"></div>
+  <div id="pilihanJawaban"></div>
+  <button onclick="selanjutnya()" id="btnLanjut">LANJUT ➡</button>
+</div>
+
+<!-- HALAMAN HASIL -->
+<div class="container" id="halamanHasil" style="display:none;">
+  <div class="hasil">
+    <h1>🏆 UJIAN SELESAI</h1>
+    <div class="detail">
+      <b>👤 Nama:</b> <span id="hasilNama"></span><br>
+      <b>🏫 Kelas:</b> <span id="hasilKelas"></span><br>
+      <b>🔢 No. Ujian:</b> <span id="hasilNomor"></span><br>
+      <b>✅ Jawaban Benar:</b> <span id="hasilBenar"></span> / 25
+    </div>
+    <div>Nilai Akhir Anda:</div>
+    <div class="nilai-besar" id="nilaiAkhir">0</div>
+    <button class="wa-btn" onclick="kirimWA()">📱 KIRIM NILAI KE GURU VIA WHATSAPP</button>
+    <button class="btn-secondary" onclick="location.reload()">🔄 ULANGI</button>
+  </div>
+</div>
+
+<script>
+// ============ KONFIGURASI ============
+const NOMOR_WA_GURU = "6281234567890"; // GANTI dengan nomor WA guru
+const NAMA_GURU = "Pak/Bu Guru";
+
+// ============ BANK SOAL HOTS (25 SOAL) ============
+const soal = [
+  // ===== SEARCH ENGINE (1-6) =====
+  {
+    m: "Search Engine",
+    q: "Andi ingin mencari <b>spesifikasi mesin Toyota Kijang Innova 2015</b> dalam format PDF dari situs resmi Toyota. Query paling efektif adalah...",
+    o: [
+      "spesifikasi mesin kijang innova 2015",
+      "spesifikasi mesin Toyota Kijang Innova 2015 filetype:pdf site:toyota.co.id",
+      "PDF spesifikasi kijang innova 2015",
+      "toyota kijang innova 2015 mesin pdf"
+    ],
+    a: 1
+  },
+  {
+    m: "Search Engine",
+    q: "Seorang mekanik menemukan hasil pencarian: <i>\"Cara memperbaiki mesin mobil mati total - BlogPribadi123.com\"</i>. Langkah paling tepat sebelum menerapkan informasinya adalah...",
+    o: [
+      "Langsung mempraktikkan karena judulnya spesifik",
+      "Membandingkan dengan sumber resmi seperti buku manual atau situs produsen",
+      "Mencari video YouTube dengan judul serupa",
+      "Bertanya ke teman di grup WhatsApp"
+    ],
+    a: 1
+  },
+  {
+    m: "Search Engine",
+    q: "Operator search <b>\"-\"</b> (tanda minus) berfungsi untuk...",
+    o: [
+      "Menjumlahkan kata kunci",
+      "Mengecualikan kata tertentu dari hasil pencarian",
+      "Mencari frasa yang persis sama",
+      "Membatasi pencarian pada situs tertentu"
+    ],
+    a: 1
+  },
+  {
+    m: "Search Engine",
+    q: "Rina mencari <b>\"harga oli Shell Helix HX7 10W-40\"</b> tapi hasilnya banyak menampilkan oli merek lain. Strategi terbaik adalah...",
+    o: [
+      "Menggunakan tanda kutip: \"Shell Helix HX7 10W-40\" harga",
+      "Mengetik ulang dengan huruf kapital semua",
+      "Mencari di Google Images saja",
+      "Menghapus kata 'harga' dari pencarian"
+    ],
+    a: 0
+  },
+  {
+    m: "Search Engine",
+    q: "Dua siswa mencari informasi tentang <b>\"pengertian ECU mobil\"</b>. Siswa A mendapat 10.000 hasil dalam 0,3 detik, Siswa B mendapat 500 hasil dalam 0,4 detik tapi semuanya dari jurnal otomotif terpercaya. Pernyataan yang PALING TEPAT adalah...",
+    o: [
+      "Siswa A lebih cerdas karena hasilnya lebih banyak",
+      "Siswa B lebih efektif karena kualitas sumber lebih terjamin",
+      "Keduanya sama-sama benar",
+      "Search engine tidak bisa diandalkan untuk materi otomotif"
+    ],
+    a: 1
+  },
+  {
+    m: "Search Engine",
+    q: "Query <b>site:go.id \"uji emisi kendaraan\"</b> akan menghasilkan...",
+    o: [
+      "Semua situs di dunia tentang uji emisi",
+      "Hanya halaman dari situs resmi pemerintah Indonesia (.go.id) tentang uji emisi",
+      "Situs pendidikan tentang uji emisi",
+      "Video YouTube tentang uji emisi"
+    ],
+    a: 1
+  },
+
+  // ===== EKOSISTEM PEMERIKSA FAKTA (7-12) =====
+  {
+    m: "Ekosistem Pemeriksa Fakta",
+    q: "Beredar pesan berantai: <i>\"BBM akan naik 50% besok, sebarkan sebanyak-banyaknya!\"</i> tanpa menyebutkan sumber resmi. Tindakan paling tepat sesuai ekosistem pemeriksa fakta adalah...",
+    o: [
+      "Ikut menyebarkan karena khawatir",
+      "Cek ke situs resmi Pertamina atau Kementerian ESDM sebelum mempercayai",
+      "Tanya ke grup WhatsApp keluarga",
+      "Simpan pesan sebagai informasi pribadi"
+    ],
+    a: 1
+  },
+  {
+    m: "Ekosistem Pemeriksa Fakta",
+    q: "Sebuah akun Instagram mengklaim <i>\"Mobil listrik lebih boros energi daripada mobil bensin\"</i> tanpa mencantumkan referensi. Indikator hoaks yang muncul adalah...",
+    o: [
+      "Klaim kontroversial tanpa sumber kredibel",
+      "Akun memiliki banyak followers",
+      "Foto yang ditampilkan berkualitas tinggi",
+      "Bahasa yang digunakan formal"
+    ],
+    a: 0
+  },
+  {
+    m: "Ekosistem Pemeriksa Fakta",
+    q: "Situs <b>turnbackhoax.id</b> dan <b>cekfakta.com</b> berperan dalam ekosistem digital sebagai...",
+    o: [
+      "Penjual sparepart online",
+      "Platform verifikasi dan klarifikasi informasi bohong",
+      "Media sosial alternatif",
+      "Mesin pencari khusus otomotif"
+    ],
+    a: 1
+  },
+  {
+    m: "Ekosistem Pemeriksa Fakta",
+    q: "Budi hanya percaya berita yang mendukung pendapatnya bahwa \"mobil Jepang lebih awet dari mobil Eropa\" dan mengabaikan data pembanding. Fenomena ini disebut...",
+    o: [
+      "Bias konfirmasi (confirmation bias)",
+      "Membaca lateral",
+      "Efek mesin pencari",
+      "Literasi digital"
+    ],
+    a: 0
+  },
+  {
+    m: "Ekosistem Pemeriksa Fakta",
+    q: "Foto mobil terbakar disebar dengan klaim <i>\"Mobil listrik meledak di Jakarta\"</i>. Langkah verifikasi yang PALING KUAT adalah...",
+    o: [
+      "Reverse image search untuk cek asal-usul foto",
+      "Melihat jumlah likes di postingan",
+      "Membaca komentar netizen",
+      "Memposting ulang dengan tanda tanya"
+    ],
+    a: 0
+  },
+  {
+    m: "Ekosistem Pemeriksa Fakta",
+    q: "Mengapa masyarakat perlu menjadi bagian dari ekosistem pemeriksa fakta, bukan hanya bergantung pada platform?",
+    o: [
+      "Karena platform tidak mampu memeriksa semua konten secara real-time",
+      "Karena hoaks hanya ada di platform tertentu",
+      "Karena pemerintah melarang platform memeriksa hoaks",
+      "Karena semua informasi di internet sudah benar"
+    ],
+    a: 0
+  },
+
+  // ===== MEMBACA LATERAL (13-18) =====
+  {
+    m: "Membaca Lateral",
+    q: "Seorang siswa membaca artikel di blog yang mengklaim <i>\"Oli sintetis wajib diganti setiap 3.000 km\"</i>. Penerapan <b>membaca lateral</b> yang tepat adalah...",
+    o: [
+      "Membaca artikel tersebut sampai selesai",
+      "Membuka tab baru untuk mencari informasi dari situs produsen oli & bengkel resmi",
+      "Mencetak artikel tersebut",
+      "Menghafal isi artikel"
+    ],
+    a: 1
+  },
+  {
+    m: "Membaca Lateral",
+    q: "Perbedaan utama <b>membaca vertikal</b> dan <b>membaca lateral</b> adalah...",
+    o: [
+      "Vertikal membaca satu sumber secara mendalam; lateral membandingkan banyak sumber sekaligus",
+      "Vertikal lebih cepat dari lateral",
+      "Lateral hanya untuk buku cetak",
+      "Tidak ada perbedaan"
+    ],
+    a: 0
+  },
+  {
+    m: "Membaca Lateral",
+    q: "Saat menemukan klaim <i>\"Mobil A paling irit BBM se-Indonesia\"</i> di sebuah iklan, langkah lateral reading yang tepat adalah...",
+    o: [
+      "Langsung membeli mobil tersebut",
+      "Mencari data uji emisi & konsumsi BBM dari sumber independen seperti jurnal atau lembaga pengujian",
+      "Mempercayai karena iklan pasti benar",
+      "Mengabaikan tanpa verifikasi"
+    ],
+    a: 1
+  },
+  {
+    m: "Membaca Lateral",
+    q: "Mengapa membaca lateral lebih efektif untuk memverifikasi informasi di internet?",
+    o: [
+      "Karena internet penuh dengan informasi yang belum terverifikasi",
+      "Karena semua situs web bisa dipercaya",
+      "Karena membaca lateral lebih cepat selesai",
+      "Karena tidak perlu membuka tab baru"
+    ],
+    a: 0
+  },
+  {
+    m: "Membaca Lateral",
+    q: "Siti menemukan berita tentang recall mobil di situs berita online. Untuk memverifikasi, dia membuka situs resmi ATPM (Agen Tunggal Pemegang Merek). Tindakan ini menunjukkan penerapan...",
+    o: [
+      "Membaca lateral dengan cross-check ke sumber primer",
+      "Membaca vertikal",
+      "Bias konfirmasi",
+      "Plagiarisme informasi"
+    ],
+    a: 0
+  },
+  {
+    m: "Membaca Lateral",
+    q: "Manfaat utama membaca lateral bagi seorang mekanik yang mencari informasi perbaikan mesin adalah...",
+    o: [
+      "Menghindari informasi menyesatkan dari satu sumber yang belum teruji",
+      "Membuat pekerjaan lebih cepat selesai",
+      "Menghemat kuota internet",
+      "Menghilangkan kebutuhan buku manual"
+    ],
+    a: 0
+  },
+
+  // ===== MICROSOFT WORD (19-25) =====
+  {
+    m: "Microsoft Word",
+    q: "Sebuah bengkel ingin mengirim <b>surat penawaran jasa servis</b> yang sama kepada 100 pelanggan dengan nama berbeda. Fitur Word yang PALING EFEKTIF adalah...",
+    o: [
+      "Copy-paste manual satu per satu",
+      "Mail Merge dengan data dari Excel",
+      "Track Changes",
+      "Header & Footer"
+    ],
+    a: 1
+  },
+  {
+    m: "Microsoft Word",
+    q: "Kepala bengkel meminta mekanik senior mereview SOP kerja. Agar perubahan yang dibuat terlihat jelas dengan catatan, fitur yang digunakan adalah...",
+    o: [
+      "Find & Replace",
+      "Track Changes + Comments",
+      "Page Layout",
+      "Word Art"
+    ],
+    a: 1
+  },
+  {
+    m: "Microsoft Word",
+    q: "Andi menyusun laporan praktikum 50 halaman. Agar daftar isi otomatis dan nomor halaman update sendiri, langkah terbaik adalah...",
+    o: [
+      "Mengetik daftar isi manual",
+      "Menggunakan Heading Styles + Table of Contents otomatis",
+      "Membuat daftar isi di Excel lalu di-copy",
+      "Menyusun halaman satu per satu"
+    ],
+    a: 1
+  },
+  {
+    m: "Microsoft Word",
+    q: "Dalam dokumen laporan bengkel, bab 1 harus menggunakan nomor halaman i, ii, iii dan bab 2 seterusnya 1, 2, 3. Fitur yang digunakan adalah...",
+    o: [
+      "Page Color",
+      "Section Break + Format Page Numbers",
+      "Watermark",
+      "Drop Cap"
+    ],
+    a: 1
+  },
+  {
+    m: "Microsoft Word",
+    q: "Seorang admin harus mengganti semua kata <b>\"spared part\"</b> (salah ketik) menjadi <b>\"sparepart\"</b> di dokumen 30 halaman. Cara tercepat adalah...",
+    o: [
+      "Mencari manual satu per satu",
+      "Ctrl+H (Find & Replace) → Replace All",
+      "Menghafal lokasi setiap kesalahan",
+      "Mencetak lalu coret manual"
+    ],
+    a: 1
+  },
+  {
+    m: "Microsoft Word",
+    q: "Dokumen laporan keuangan bengkel akan dikirim ke manajer via email. Agar tidak bisa diedit penerima, format penyimpanan yang tepat adalah...",
+    o: [
+      ".docx",
+      ".pdf (dengan proteksi editing)",
+      ".txt",
+      ".rtf"
+    ],
+    a: 1
+  },
+  {
+    m: "Microsoft Word",
+    q: "Fitur <b>Styles</b> (Heading 1, Heading 2, Normal) pada Word sangat berguna karena...",
+    o: [
+      "Membuat dokumen berwarna-warni",
+      "Menjaga konsistensi format dan memungkinkan pembuatan daftar isi otomatis",
+      "Memperkecil ukuran file",
+      "Menambah gambar otomatis"
+    ],
+    a: 1
+  }
+];
+
+// ============ VARIABEL GLOBAL ============
+let indeksSoal = 0;
+let skor = 0;
+let jawabanDipilih = -1;
+let waktuSisa = 45 * 60;
+let timerInterval;
+let siswa = {};
+let sedangPindah = false;
+
+// Acak urutan soal (opsional, tetap stabil per sesi)
+// soal.sort(() => Math.random() - 0.5);
+
+// ============ LOGIN ============
+function mulaiKuis() {
+  const nama = document.getElementById('nama').value.trim();
+  const kelas = document.getElementById('kelas').value.trim();
+  const nomor = document.getElementById('nomor').value.trim();
+  if (!nama || !kelas || !nomor) {
+    alert('Mohon lengkapi semua data!');
+    return;
+  }
+  siswa = { nama, kelas, nomor };
+  document.getElementById('infoSiswa').textContent = nama;
+  document.getElementById('halamanLogin').style.display = 'none';
+  document.getElementById('halamanKuis').style.display = 'block';
+  tampilkanSoal();
+  mulaiTimer();
+  aktifkanAntiCheat();
+}
+
+// ============ TIMER ============
+function mulaiTimer() {
+  updateTampilanTimer();
+  timerInterval = setInterval(() => {
+    waktuSisa--;
+    updateTampilanTimer();
+    if (waktuSisa <= 0) {
+      clearInterval(timerInterval);
+      alert('⏰ Waktu habis! Jawaban otomatis dikumpulkan.');
+      selesai();
+    }
+  }, 1000);
+}
+function updateTampilanTimer() {
+  const m = Math.floor(waktuSisa / 60);
+  const s = waktuSisa % 60;
+  const t = document.getElementById('timer');
+  const box = document.getElementById('timerBox');
+  t.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  box.classList.remove('warning','danger');
+  if (waktuSisa <= 60) box.classList.add('danger');
+  else if (waktuSisa <= 300) box.classList.add('warning');
+}
+
+// ============ ANTI-CHEAT ============
+function aktifkanAntiCheat() {
+  document.addEventListener('visibilitychange', deteksiKeluar);
+  window.addEventListener('blur', deteksiKeluar);
+  window.addEventListener('beforeunload', function(e) {
+    e.preventDefault();
+    e.returnValue = 'Anda akan keluar dari ujian. Yakin?';
+  });
+}
+function deteksiKeluar() {
+  if (document.hidden || document.hasFocus() === false) {
+    if (!sedangPindah && indeksSoal < soal.length) {
+      sedangPindah = true;
+      document.getElementById('peringatanKeluar').style.display = 'block';
+      setTimeout(() => {
+        indeksSoal++;
+        jawabanDipilih = -1;
+        sedangPindah = false;
+        if (indeksSoal >= soal.length) selesai();
+        else {
+          document.getElementById('peringatanKeluar').style.display = 'none';
+          tampilkanSoal();
+        }
+      }, 2000);
+    }
+  }
+}
+
+// ============ TAMPILKAN SOAL ============
+function tampilkanSoal() {
+  if (indeksSoal >= soal.length) { selesai(); return; }
+  const s = soal[indeksSoal];
+  document.getElementById('nomorSoal').textContent = indeksSoal + 1;
+  document.getElementById('materiBadge').textContent = '📘 ' + s.m;
+  document.getElementById('teksSoal').innerHTML = `${indeksSoal + 1}. ${s.q}`;
+  document.getElementById('progressFill').style.width = ((indeksSoal)/soal.length*100) + '%';
+  jawabanDipilih = -1;
+  const container = document.getElementById('pilihanJawaban');
+  container.innerHTML = '';
+  s.o.forEach((opsi, i) => {
+    const div = document.createElement('div');
+    div.className = 'pilihan';
+    div.innerHTML = `<b>${String.fromCharCode(65+i)}.</b> ${opsi}`;
+    div.onclick = () => pilihJawaban(i, div);
+    container.appendChild(div);
+  });
+  document.getElementById('btnLanjut').textContent = 
+    indeksSoal === soal.length - 1 ? 'SELESAI ✓' : 'LANJUT ➡';
+}
+function pilihJawaban(i, el) {
+  document.querySelectorAll('.pilihan').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  jawabanDipilih = i;
+}
+function selanjutnya() {
+  if (jawabanDipilih === -1) {
+    alert('Pilih jawaban terlebih dahulu!');
+    return;
+  }
+  if (jawabanDipilih === soal[indeksSoal].a) skor++;
+  indeksSoal++;
+  if (indeksSoal >= soal.length) selesai();
+  else tampilkanSoal();
+}
+
+// ============ SELESAI ============
+function selesai() {
+  clearInterval(timerInterval);
+  document.removeEventListener('visibilitychange', deteksiKeluar);
+  document.getElementById('halamanKuis').style.display = 'none';
+  document.getElementById('halamanHasil').style.display = 'block';
+  const nilai = Math.round((skor / soal.length) * 100);
+  document.getElementById('hasilNama').textContent = siswa.nama;
+  document.getElementById('hasilKelas').textContent = siswa.kelas;
+  document.getElementById('hasilNomor').textContent = siswa.nomor;
+  document.getElementById('hasilBenar').textContent = skor;
+  document.getElementById('nilaiAkhir').textContent = nilai;
+  window.scrollTo(0, 0);
+}
+
+// ============ KIRIM WHATSAPP ============
+function kirimWA() {
+  const nilai = Math.round((skor / soal.length) * 100);
+  const tanggal = new Date().toLocaleString('id-ID');
+  const pesan = 
+`*📝 LAPORAN KUIS INFORMATIKA HOTS*
+*Materi:* Search Engine, Cek Fakta, Lateral Reading, MS Word
+
+👤 *Nama:* ${siswa.nama}
+🏫 *Kelas:* ${siswa.kelas}
+🔢 *No. Ujian:* ${siswa.nomor}
+✅ *Benar:* ${skor} / 25
+📊 *Nilai:* ${nilai}
+📅 *Waktu:* ${tanggal}
+
+Terima kasih, ${NAMA_GURU}.`;
+  const url = `https://wa.me/${NOMOR_WA_GURU}?text=${encodeURIComponent(pesan)}`;
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
