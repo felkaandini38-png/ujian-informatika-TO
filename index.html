@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Kuis Informatika HOTS - Tema Otomotif</title>
+<title>Ujian Informatika</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -24,7 +24,6 @@
     box-shadow: 0 10px 40px rgba(0,0,0,0.4);
   }
   h1 { color: #1e3c72; text-align: center; margin-bottom: 8px; font-size: 1.5em; }
-  h2 { color: #c0392b; margin-bottom: 12px; font-size: 1.2em; }
   .subtitle { text-align: center; color: #555; margin-bottom: 20px; font-size: 0.9em; }
   .materi-badge {
     display: inline-block;
@@ -36,15 +35,15 @@
     margin-bottom: 10px;
   }
   label { font-weight: bold; display: block; margin-top: 10px; font-size: 0.95em; }
-  input, select {
+  input {
     width: 100%;
     padding: 14px;
     margin: 6px 0 12px;
     border: 2px solid #ccc;
     border-radius: 10px;
-    font-size: 16px; /* mencegah auto-zoom di iOS */
+    font-size: 16px;
   }
-  input:focus, select:focus { border-color: #2a5298; outline: none; }
+  input:focus { border-color: #2a5298; outline: none; }
   button {
     background: #c0392b;
     color: #fff;
@@ -60,7 +59,6 @@
     touch-action: manipulation;
   }
   button:hover, button:active { background: #a93226; transform: scale(0.98); }
-  button:disabled { background: #888; cursor: not-allowed; }
   .header-quiz {
     display: flex;
     justify-content: space-between;
@@ -79,7 +77,6 @@
     padding: 6px 12px;
     border-radius: 6px;
     font-weight: bold;
-    font-size: 1em;
     white-space: nowrap;
   }
   .timer.warning { background: #e67e22; animation: pulse 1s infinite; }
@@ -116,6 +113,11 @@
     font-size: 0.9em;
     line-height: 1.6;
   }
+  .info-box.red {
+    background: #ffebee;
+    border-left-color: #c62828;
+    color: #b71c1c;
+  }
   .soal {
     font-size: 1em;
     margin-bottom: 15px;
@@ -125,13 +127,13 @@
   .soal b { color: #1e3c72; }
   .pilihan {
     background: #f5f5f5;
-    padding: 14px;
-    margin: 10px 0;
+    padding: 12px 14px;
+    margin: 8px 0;
     border-radius: 10px;
     cursor: pointer;
     border: 2px solid transparent;
     transition: 0.2s;
-    font-size: 0.95em;
+    font-size: 0.93em;
     line-height: 1.5;
     user-select: none;
   }
@@ -156,26 +158,32 @@
     font-size: 0.95em;
     line-height: 1.8;
   }
-  .btn-secondary { background: #555; }
-  .btn-secondary:hover, .btn-secondary:active { background: #333; }
+  .selesai-msg {
+    background: #fff3cd;
+    color: #856404;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 0.85em;
+    border-left: 5px solid #ffc107;
+  }
 
-  /* ===== RESPONSIVE MOBILE ===== */
   @media (max-width: 600px) {
     body { padding: 5px; }
     .container { padding: 15px; border-radius: 12px; margin: 5px auto; }
     h1 { font-size: 1.3em; }
     .header-quiz { font-size: 0.8em; padding: 8px 10px; }
     .soal { font-size: 0.95em; }
-    .pilihan { padding: 12px; font-size: 0.9em; }
+    .pilihan { padding: 11px 12px; font-size: 0.88em; }
     .nilai-besar { font-size: 3em; }
     button { padding: 13px; font-size: 15px; }
-    input, select { padding: 12px; }
+    input { padding: 12px; }
   }
   @media (max-width: 360px) {
     .container { padding: 12px; }
     h1 { font-size: 1.15em; }
     .soal { font-size: 0.9em; }
-    .pilihan { padding: 10px; font-size: 0.85em; }
+    .pilihan { padding: 10px; font-size: 0.83em; }
   }
 </style>
 </head>
@@ -183,14 +191,20 @@
 
 <!-- HALAMAN LOGIN -->
 <div class="container" id="halamanLogin">
-  <h1>🏁 KUIS INFORMATIKA HOTS</h1>
+  <h1>🏁 UJIAN INFORMATIKA</h1>
   <p class="subtitle">Search Engine • Cek Fakta • Lateral Reading • MS Word</p>
   <div class="info-box">
     <b>📋 Petunjuk Pengerjaan:</b><br>
     ⏱ Waktu: <b>45 menit</b> (25 soal)<br>
     📱 Kerjakan di HP dengan tenang<br>
-    ⚠️ <b>Dilarang pindah aplikasi/tab.</b> Jika terdeteksi keluar, soal otomatis salah & lanjut.<br>
-    🧠 Soal berbentuk analisis & studi kasus (HOTS)
+    🧠 Soal berbentuk analisis & studi kasus (HOTS)<br>
+    🅰️ Setiap soal memiliki <b>5 pilihan jawaban (A–E)</b>
+  </div>
+  <div class="info-box red">
+    <b>⚠️ PERINGATAN PENTING:</b><br>
+    • Dilarang pindah aplikasi/tab/browser.<br>
+    • Jika terdeteksi keluar, soal otomatis salah & lanjut.<br>
+    • <b>Ujian hanya dapat dikerjakan 1x.</b> Setelah selesai, Anda tidak dapat mengulang.
   </div>
   <label>Nama Lengkap</label>
   <input type="text" id="nama" placeholder="Masukkan nama lengkap">
@@ -231,16 +245,19 @@
     <div>Nilai Akhir Anda:</div>
     <div class="nilai-besar" id="nilaiAkhir">0</div>
     <button class="wa-btn" onclick="kirimWA()">📱 KIRIM NILAI KE GURU VIA WHATSAPP</button>
-    <button class="btn-secondary" onclick="location.reload()">🔄 ULANGI</button>
+    <div class="selesai-msg">
+      🔒 Ujian telah selesai dan tidak dapat diulang.<br>
+      Silakan kirim hasil ke guru Anda melalui tombol di atas.
+    </div>
   </div>
 </div>
 
 <script>
 // ============ KONFIGURASI ============
-const NOMOR_WA_GURU = "6281234567890"; // GANTI dengan nomor WA guru
-const NAMA_GURU = "Pak/Bu Guru";
+const NOMOR_WA_GURU = "6282385838956"; // GANTI dengan nomor WA guru
+const NAMA_GURU = "Felka Andini, S.Pd, M.Kom";
 
-// ============ BANK SOAL HOTS (25 SOAL) ============
+// ============ BANK SOAL HOTS (25 SOAL, 5 OPSI) ============
 const soal = [
   // ===== SEARCH ENGINE (1-6) =====
   {
@@ -250,7 +267,8 @@ const soal = [
       "spesifikasi mesin kijang innova 2015",
       "spesifikasi mesin Toyota Kijang Innova 2015 filetype:pdf site:toyota.co.id",
       "PDF spesifikasi kijang innova 2015",
-      "toyota kijang innova 2015 mesin pdf"
+      "toyota kijang innova 2015 mesin pdf",
+      "filetype:pdf kijang innova"
     ],
     a: 1
   },
@@ -261,7 +279,8 @@ const soal = [
       "Langsung mempraktikkan karena judulnya spesifik",
       "Membandingkan dengan sumber resmi seperti buku manual atau situs produsen",
       "Mencari video YouTube dengan judul serupa",
-      "Bertanya ke teman di grup WhatsApp"
+      "Bertanya ke teman di grup WhatsApp",
+      "Mengabaikan karena semua blog tidak bisa dipercaya"
     ],
     a: 1
   },
@@ -272,7 +291,8 @@ const soal = [
       "Menjumlahkan kata kunci",
       "Mengecualikan kata tertentu dari hasil pencarian",
       "Mencari frasa yang persis sama",
-      "Membatasi pencarian pada situs tertentu"
+      "Membatasi pencarian pada situs tertentu",
+      "Mencari angka negatif dalam data"
     ],
     a: 1
   },
@@ -283,7 +303,8 @@ const soal = [
       "Menggunakan tanda kutip: \"Shell Helix HX7 10W-40\" harga",
       "Mengetik ulang dengan huruf kapital semua",
       "Mencari di Google Images saja",
-      "Menghapus kata 'harga' dari pencarian"
+      "Menghapus kata 'harga' dari pencarian",
+      "Menggunakan operator OR antar merek oli"
     ],
     a: 0
   },
@@ -293,8 +314,9 @@ const soal = [
     o: [
       "Siswa A lebih cerdas karena hasilnya lebih banyak",
       "Siswa B lebih efektif karena kualitas sumber lebih terjamin",
-      "Keduanya sama-sama benar",
-      "Search engine tidak bisa diandalkan untuk materi otomotif"
+      "Keduanya sama-sama benar dan tidak bisa dibandingkan",
+      "Search engine tidak bisa diandalkan untuk materi otomotif",
+      "Siswa A seharusnya menggunakan operator AND agar hasilnya sedikit"
     ],
     a: 1
   },
@@ -304,8 +326,9 @@ const soal = [
     o: [
       "Semua situs di dunia tentang uji emisi",
       "Hanya halaman dari situs resmi pemerintah Indonesia (.go.id) tentang uji emisi",
-      "Situs pendidikan tentang uji emisi",
-      "Video YouTube tentang uji emisi"
+      "Situs pendidikan (.sch.id/.ac.id) tentang uji emisi",
+      "Video YouTube tentang uji emisi",
+      "Hanya situs berita online tentang uji emisi"
     ],
     a: 1
   },
@@ -318,7 +341,8 @@ const soal = [
       "Ikut menyebarkan karena khawatir",
       "Cek ke situs resmi Pertamina atau Kementerian ESDM sebelum mempercayai",
       "Tanya ke grup WhatsApp keluarga",
-      "Simpan pesan sebagai informasi pribadi"
+      "Simpan pesan sebagai informasi pribadi",
+      "Mengabaikan karena semua pesan berantai pasti benar"
     ],
     a: 1
   },
@@ -329,7 +353,8 @@ const soal = [
       "Klaim kontroversial tanpa sumber kredibel",
       "Akun memiliki banyak followers",
       "Foto yang ditampilkan berkualitas tinggi",
-      "Bahasa yang digunakan formal"
+      "Bahasa yang digunakan formal",
+      "Postingan mendapat banyak likes"
     ],
     a: 0
   },
@@ -340,7 +365,8 @@ const soal = [
       "Penjual sparepart online",
       "Platform verifikasi dan klarifikasi informasi bohong",
       "Media sosial alternatif",
-      "Mesin pencari khusus otomotif"
+      "Mesin pencari khusus otomotif",
+      "Lembaga pemerintah pembuat regulasi"
     ],
     a: 1
   },
@@ -351,7 +377,8 @@ const soal = [
       "Bias konfirmasi (confirmation bias)",
       "Membaca lateral",
       "Efek mesin pencari",
-      "Literasi digital"
+      "Literasi digital",
+      "Efek anchoring"
     ],
     a: 0
   },
@@ -362,7 +389,8 @@ const soal = [
       "Reverse image search untuk cek asal-usul foto",
       "Melihat jumlah likes di postingan",
       "Membaca komentar netizen",
-      "Memposting ulang dengan tanda tanya"
+      "Memposting ulang dengan tanda tanya",
+      "Melihat tanggal postingan saja"
     ],
     a: 0
   },
@@ -373,7 +401,8 @@ const soal = [
       "Karena platform tidak mampu memeriksa semua konten secara real-time",
       "Karena hoaks hanya ada di platform tertentu",
       "Karena pemerintah melarang platform memeriksa hoaks",
-      "Karena semua informasi di internet sudah benar"
+      "Karena semua informasi di internet sudah benar",
+      "Karena platform sudah sempurna dalam mendeteksi hoaks"
     ],
     a: 0
   },
@@ -386,7 +415,8 @@ const soal = [
       "Membaca artikel tersebut sampai selesai",
       "Membuka tab baru untuk mencari informasi dari situs produsen oli & bengkel resmi",
       "Mencetak artikel tersebut",
-      "Menghafal isi artikel"
+      "Menghafal isi artikel",
+      "Bertanya ke teman sekelas tanpa verifikasi"
     ],
     a: 1
   },
@@ -397,7 +427,8 @@ const soal = [
       "Vertikal membaca satu sumber secara mendalam; lateral membandingkan banyak sumber sekaligus",
       "Vertikal lebih cepat dari lateral",
       "Lateral hanya untuk buku cetak",
-      "Tidak ada perbedaan"
+      "Tidak ada perbedaan, keduanya sama",
+      "Lateral lebih lambat dan tidak efektif"
     ],
     a: 0
   },
@@ -408,7 +439,8 @@ const soal = [
       "Langsung membeli mobil tersebut",
       "Mencari data uji emisi & konsumsi BBM dari sumber independen seperti jurnal atau lembaga pengujian",
       "Mempercayai karena iklan pasti benar",
-      "Mengabaikan tanpa verifikasi"
+      "Mengabaikan tanpa verifikasi",
+      "Membaca testimoni pengguna di kolom komentar iklan"
     ],
     a: 1
   },
@@ -419,7 +451,8 @@ const soal = [
       "Karena internet penuh dengan informasi yang belum terverifikasi",
       "Karena semua situs web bisa dipercaya",
       "Karena membaca lateral lebih cepat selesai",
-      "Karena tidak perlu membuka tab baru"
+      "Karena tidak perlu membuka tab baru",
+      "Karena membaca lateral hanya menggunakan satu sumber"
     ],
     a: 0
   },
@@ -430,7 +463,8 @@ const soal = [
       "Membaca lateral dengan cross-check ke sumber primer",
       "Membaca vertikal",
       "Bias konfirmasi",
-      "Plagiarisme informasi"
+      "Plagiarisme informasi",
+      "Efek anchoring"
     ],
     a: 0
   },
@@ -441,7 +475,8 @@ const soal = [
       "Menghindari informasi menyesatkan dari satu sumber yang belum teruji",
       "Membuat pekerjaan lebih cepat selesai",
       "Menghemat kuota internet",
-      "Menghilangkan kebutuhan buku manual"
+      "Menghilangkan kebutuhan buku manual",
+      "Membuat mesin lebih awet secara otomatis"
     ],
     a: 0
   },
@@ -454,7 +489,8 @@ const soal = [
       "Copy-paste manual satu per satu",
       "Mail Merge dengan data dari Excel",
       "Track Changes",
-      "Header & Footer"
+      "Header & Footer",
+      "Template dokumen kosong"
     ],
     a: 1
   },
@@ -465,7 +501,8 @@ const soal = [
       "Find & Replace",
       "Track Changes + Comments",
       "Page Layout",
-      "Word Art"
+      "Word Art",
+      "Compare Documents"
     ],
     a: 1
   },
@@ -476,7 +513,8 @@ const soal = [
       "Mengetik daftar isi manual",
       "Menggunakan Heading Styles + Table of Contents otomatis",
       "Membuat daftar isi di Excel lalu di-copy",
-      "Menyusun halaman satu per satu"
+      "Menyusun halaman satu per satu",
+      "Menggunakan fitur Bookmark saja"
     ],
     a: 1
   },
@@ -487,7 +525,8 @@ const soal = [
       "Page Color",
       "Section Break + Format Page Numbers",
       "Watermark",
-      "Drop Cap"
+      "Drop Cap",
+      "Page Break saja"
     ],
     a: 1
   },
@@ -498,7 +537,8 @@ const soal = [
       "Mencari manual satu per satu",
       "Ctrl+H (Find & Replace) → Replace All",
       "Menghafal lokasi setiap kesalahan",
-      "Mencetak lalu coret manual"
+      "Mencetak lalu coret manual",
+      "Menggunakan AutoCorrect setelah dokumen selesai"
     ],
     a: 1
   },
@@ -509,7 +549,8 @@ const soal = [
       ".docx",
       ".pdf (dengan proteksi editing)",
       ".txt",
-      ".rtf"
+      ".rtf",
+      ".doc versi lama"
     ],
     a: 1
   },
@@ -520,7 +561,8 @@ const soal = [
       "Membuat dokumen berwarna-warni",
       "Menjaga konsistensi format dan memungkinkan pembuatan daftar isi otomatis",
       "Memperkecil ukuran file",
-      "Menambah gambar otomatis"
+      "Menambah gambar otomatis",
+      "Membuat animasi teks pada dokumen"
     ],
     a: 1
   }
@@ -534,9 +576,6 @@ let waktuSisa = 45 * 60;
 let timerInterval;
 let siswa = {};
 let sedangPindah = false;
-
-// Acak urutan soal (opsional, tetap stabil per sesi)
-// soal.sort(() => Math.random() - 0.5);
 
 // ============ LOGIN ============
 function mulaiKuis() {
