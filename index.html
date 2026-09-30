@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Ujian Informatika</title>
+<title>Kuis Informatika HOTS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -118,6 +118,11 @@
     border-left-color: #c62828;
     color: #b71c1c;
   }
+  .info-box.blue {
+    background: #e3f2fd;
+    border-left-color: #1976d2;
+    color: #0d47a1;
+  }
   .soal {
     font-size: 1em;
     margin-bottom: 15px;
@@ -191,8 +196,12 @@
 
 <!-- HALAMAN LOGIN -->
 <div class="container" id="halamanLogin">
-  <h1>🏁 UJIAN INFORMATIKA</h1>
+  <h1>🏁 KUIS INFORMATIKA HOTS</h1>
   <p class="subtitle">Search Engine • Cek Fakta • Lateral Reading • MS Word</p>
+  <div class="info-box blue">
+    <b>🎲 PENGACAKAN OTOMATIS:</b><br>
+    Setiap kali halaman dibuka, <b>urutan soal & pilihan jawaban akan diacak secara otomatis</b>. Jadi setiap siswa mendapat urutan yang berbeda.
+  </div>
   <div class="info-box">
     <b>📋 Petunjuk Pengerjaan:</b><br>
     ⏱ Waktu: <b>45 menit</b> (25 soal)<br>
@@ -254,11 +263,11 @@
 
 <script>
 // ============ KONFIGURASI ============
-const NOMOR_WA_GURU = "6282385838956"; // GANTI dengan nomor WA guru
-const NAMA_GURU = "Felka Andini, S.Pd, M.Kom";
+const NOMOR_WA_GURU = "6281234567890"; // GANTI dengan nomor WA guru
+const NAMA_GURU = "Pak/Bu Guru";
 
 // ============ BANK SOAL HOTS (25 SOAL, 5 OPSI) ============
-const soal = [
+const bankSoal = [
   // ===== SEARCH ENGINE (1-6) =====
   {
     m: "Search Engine",
@@ -568,7 +577,43 @@ const soal = [
   }
 ];
 
+// ============ FUNGSI PENGACAKAN (FISHER-YATES SHUFFLE) ============
+function acakArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Acak urutan soal & opsi jawaban di setiap soal
+function acakSemuaSoal() {
+  // 1. Acak urutan soal
+  const soalTeracak = acakArray(bankSoal);
+  
+  // 2. Untuk setiap soal, acak urutan opsi & sesuaikan indeks jawaban benar
+  return soalTeracak.map(s => {
+    // Buat pasangan [opsi, apakahBenar]
+    const pasangan = s.o.map((opsi, idx) => ({
+      teks: opsi,
+      benar: idx === s.a
+    }));
+    // Acak pasangan
+    const pasanganTeracak = acakArray(pasangan);
+    // Cari indeks baru dari jawaban benar
+    const indeksBenarBaru = pasanganTeracak.findIndex(p => p.benar);
+    return {
+      m: s.m,
+      q: s.q,
+      o: pasanganTeracak.map(p => p.teks),
+      a: indeksBenarBaru
+    };
+  });
+}
+
 // ============ VARIABEL GLOBAL ============
+let soal = []; // akan diisi setelah pengacakan
 let indeksSoal = 0;
 let skor = 0;
 let jawabanDipilih = -1;
@@ -576,6 +621,11 @@ let waktuSisa = 45 * 60;
 let timerInterval;
 let siswa = {};
 let sedangPindah = false;
+
+// ============ ACAK SAAT HALAMAN DIBUKA ============
+window.addEventListener('DOMContentLoaded', () => {
+  soal = acakSemuaSoal();
+});
 
 // ============ LOGIN ============
 function mulaiKuis() {
